@@ -1,4 +1,4 @@
-package br.com.zenon.fraud.enums;
+package br.com.zenon.fraud.model.enums;
 
 public enum TypeTransaction {
 

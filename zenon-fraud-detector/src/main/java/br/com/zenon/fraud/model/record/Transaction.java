@@ -1,6 +1,6 @@
-package br.com.zenon.fraud.record;
+package br.com.zenon.fraud.model.record;
 
-import br.com.zenon.fraud.enums.TypeTransaction;
+import br.com.zenon.fraud.model.enums.TypeTransaction;
 
 import java.math.BigDecimal;
 
