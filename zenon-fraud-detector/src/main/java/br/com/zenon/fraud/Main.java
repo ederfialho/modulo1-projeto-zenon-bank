@@ -24,13 +24,10 @@ public class Main {
         IO.println(secondTransaction);
 
 
-        IO.println("------------------------------------------------------------------------------------------------------------------------");
+        IO.println("------------------------------------------------------------------------------------------------------------------------------------------");
         TransactionIngestor transactionIngestor = new TransactionIngestor();
         List<Transaction> transactions =  transactionIngestor.readFile("data/PS_20174392719_1491204439457_log.csv");
 
-        for (int I = 0; I < 10; I++) {
-            IO.println(transactions.get(I));
-        }
-
+        transactions.stream().limit(10).forEach(IO::println);
     }
 }
