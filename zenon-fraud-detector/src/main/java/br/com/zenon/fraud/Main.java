@@ -25,9 +25,17 @@ public class Main {
 
 
         IO.println("------------------------------------------------------------------------------------------------------------------------------------------");
+
         TransactionIngestor transactionIngestor = new TransactionIngestor();
         List<Transaction> transactions =  transactionIngestor.readFile("data/PS_20174392719_1491204439457_log.csv");
 
         transactions.stream().limit(10).forEach(IO::println);
+
+        IO.println("------------------------------------------------------------------------------------------------------------------------------------------");
+
+        List<Transaction> transactionsErr =  transactionIngestor.readFile("data/paysim_with_bad_data.txt");
+
+        IO.println(transactionsErr.size());
+        transactionsErr.forEach(IO::println);
     }
 }
