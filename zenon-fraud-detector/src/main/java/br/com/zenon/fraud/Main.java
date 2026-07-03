@@ -3,10 +3,12 @@ package br.com.zenon.fraud;
 import br.com.zenon.fraud.model.enums.TypeTransaction;
 import br.com.zenon.fraud.model.record.Customer;
 import br.com.zenon.fraud.model.record.Transaction;
+import br.com.zenon.fraud.service.FraudAnalyzer;
 import br.com.zenon.fraud.service.TransactionIngestor;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
 
@@ -37,5 +39,28 @@ public class Main {
 
         IO.println(transactionsErr.size());
         transactionsErr.forEach(IO::println);
+
+        IO.println("--------------------------------------------------------------");
+
+        var fraudAnalyzer = new FraudAnalyzer(transactions);
+
+        long fraudCount = fraudAnalyzer.countFrauds();
+        IO.println("1. Total de fraudes: " + fraudCount);
+
+        List<BigDecimal> highestFraudAmounts = fraudAnalyzer.findHighestValueFraudAmounts(3);
+        IO.println("2. Top 3 fraudes de maior valor:");
+        highestFraudAmounts.forEach(amount -> IO.println("- %.2f".formatted(amount)));
+
+        List<String> suspiciousClients = fraudAnalyzer.findTopSuspiciousClients(5);
+        IO.println("3. Clientes suspeitos:");
+        suspiciousClients.forEach(IO::println);
+
+        BigDecimal totalFraudLoss = fraudAnalyzer.calculateTotalFraudLoss();
+        IO.println("4. Prejuízo total: " + totalFraudLoss);
+
+        Map<TypeTransaction, Long> fraudCountByType = fraudAnalyzer.countFraudsByType();
+        IO.println("5. Fraudes por tipo:");
+        fraudCountByType.forEach((type, count) -> IO.println("- %s: %d".formatted(type, count)));
+
     }
 }
