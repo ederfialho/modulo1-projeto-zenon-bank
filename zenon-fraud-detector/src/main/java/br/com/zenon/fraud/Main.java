@@ -3,6 +3,9 @@ package br.com.zenon.fraud;
 import br.com.zenon.fraud.model.enums.TypeTransaction;
 import br.com.zenon.fraud.model.record.Customer;
 import br.com.zenon.fraud.model.record.Transaction;
+import br.com.zenon.fraud.repository.TransactionListRepository;
+import br.com.zenon.fraud.repository.TransactionMapRepository;
+import br.com.zenon.fraud.repository.TransactionRepository;
 import br.com.zenon.fraud.service.FraudAnalyzer;
 import br.com.zenon.fraud.service.TransactionIngestor;
 
@@ -61,6 +64,30 @@ public class Main {
         Map<TypeTransaction, Long> fraudCountByType = fraudAnalyzer.countFraudsByType();
         IO.println("5. Fraudes por tipo:");
         fraudCountByType.forEach((type, count) -> IO.println("- %s: %d".formatted(type, count)));
+
+        IO.println("--------------------------------------------------------------");
+
+        TransactionRepository transactionRepository;
+
+        transactionRepository = new TransactionListRepository(transactions);
+        String notFoundOriginName = "C12345";
+        transactionRepository.findByOriginName(notFoundOriginName)
+                .ifPresentOrElse(IO::println, () -> IO.println("Transacao nao encontrada para " + notFoundOriginName));
+
+        String existingOriginName = "C1868032458";
+
+        long startTimeList = System.nanoTime();
+        transactionRepository.findByOriginName(existingOriginName)
+                .ifPresentOrElse(IO::println, () -> IO.println("Transacao nao encontrada para " + existingOriginName));
+        long endTimeList = System.nanoTime();
+        IO.println("Tempo de busca - List (ms): " + (endTimeList - startTimeList) / 1000000.0);
+
+        transactionRepository = new TransactionMapRepository(transactions);
+        startTimeList = System.nanoTime();
+        transactionRepository.findByOriginName(existingOriginName)
+                .ifPresentOrElse(IO::println, () -> IO.println("Transacao nao encontrada para " + existingOriginName));
+        endTimeList = System.nanoTime();
+        IO.println("Tempo de busca - Map (ms): " + (endTimeList - startTimeList) / 1000000.0);
 
     }
 }
